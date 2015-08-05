@@ -63,7 +63,7 @@ class ModelModuleParser extends Model {
 					
 					$keyword = $this->transliterate($cat_name);
 					
-					$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `keyword`='".$this->db->escape($keyword)."'");
+					$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `query`='category_id=$cat_id'");
 					
 					if (empty($query->row)){
 						$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `keyword`='".$this->db->escape($keyword)."'");
@@ -72,7 +72,7 @@ class ModelModuleParser extends Model {
 						else
 							$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='category_id=$cat_id', `keyword`='".$cat_id."'");
 					} else {
-						$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `keyword`='".$this->db->escape($keyword)."'");
+						$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `query`='category_id=$cat_id'");
 						$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='category_id=$cat_id', `keyword`='".$this->db->escape($keyword)."'");
 					}
 					
