@@ -186,13 +186,9 @@ class ModelModuleParser extends Model {
 		
 		$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `query`='product_id=".$product['code']."'");
 		if (empty($query->row)){
-			$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `keyword`='".$this->db->escape($keyword)."'");
-			if (empty($query->row))
-				$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='$keyword'");
-			else
-				$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='".$product['code']."'");
+			$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='$keyword'");
 		} else {
-			$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `keyword`='$keyword'");
+			$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `query`='product_id=".$product['code']."'");
 			$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='$keyword'");
 		}	
 			
