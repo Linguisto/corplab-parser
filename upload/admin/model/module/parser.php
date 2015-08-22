@@ -75,7 +75,7 @@ class ModelModuleParser extends Model {
 						$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `query`='category_id=$cat_id'");
 						$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='category_id=$cat_id', `keyword`='".$this->db->escape($keyword)."'");
 					}
-					
+					unset($query);
 					$parent_cat=$cat_id;
 				} else {
 					$cat_name = 'Канцелярские товары';
