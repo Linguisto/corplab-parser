@@ -236,33 +236,36 @@ class ControllerModuleParser extends Controller{
 				$product_data['model'] = trim($product->find('.detail-block strong.title a', 1)->plaintext);
 			
 				$manufacturer_exists = $this->model_module_parser->check_manufacturer($product_data['manufacturer']);
+				
+				$man_data['name'] = $product_data['manufacturer'];
+				$man_data['image'] ='';
+				$man_data['manufacturer_description'] = array(
+					1 => array(
+						'meta_keyword' => $product_data['manufacturer'],
+						'meta_description' => $product_data['manufacturer'],
+						'description' => $product_data['manufacturer'],
+						'seo_title' => $product_data['manufacturer'],
+						'seo_h1' => $product_data['manufacturer']
+					),
+					2 => array(
+						'meta_keyword' => $product_data['manufacturer'],
+						'meta_description' => $product_data['manufacturer'],
+						'description' => $product_data['manufacturer'],
+						'seo_title' => $product_data['manufacturer'],
+						'seo_h1' => $product_data['manufacturer']
+					)
+				);
+				$man_data['manufacturer_store'][] = 0;
+				$man_data['keyword'] = $this->model_module_parser->transliterate($product_data['manufacturer']);
+				$man_data['sort_order'] = 0;
 			
-				if ($manufacturer_exists==0){
-					$data['name'] = $product_data['manufacturer'];
-					$data['image'] ='';
-					$data['manufacturer_description'] = array(
-						1 => array(
-							'meta_keyword' => $product_data['manufacturer'],
-							'meta_description' => $product_data['manufacturer'],
-							'description' => $product_data['manufacturer'],
-							'seo_title' => $product_data['manufacturer'],
-							'seo_h1' => $product_data['manufacturer']
-						),
-						2 => array(
-							'meta_keyword' => $product_data['manufacturer'],
-							'meta_description' => $product_data['manufacturer'],
-							'description' => $product_data['manufacturer'],
-							'seo_title' => $product_data['manufacturer'],
-							'seo_h1' => $product_data['manufacturer']
-						)
-					);
-					$data['manufacturer_store'][] = 0;
-					$data['keyword'] = $el->plaintext;
-					$data['sort_order'] = 0;
-					$this->model_catalog_manufacturer->addManufacturer($data);
-					unset($data);
-				}
-			
+				if ($manufacturer_exists == 0)
+					$this->model_catalog_manufacturer->addManufacturer($man_data);
+				else
+					$this->model_catalog_manufacturer->editManufacturer($manufacturer_exists,$man_data);
+				
+				unset($man_data);
+				
 				$product_data['weight'] = $product->find('.info-table tr td', 1)->plaintext;
 			
 				$related_goods='';
