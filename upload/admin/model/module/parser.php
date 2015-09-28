@@ -78,7 +78,7 @@ class ModelModuleParser extends Model {
 					
 					$parent_cat=$cat_id;
 				} else {
-					$cat_name = 'Канцелярские товары';
+					$cat_name = 'Для офиса';
 					$cat_id = '5';
 					
 					$this->db->query("INSERT IGNORE INTO ".DB_PREFIX."category_description SET `category_id`=$cat_id, `language_id`=1, `name`='".$this->db->escape($cat_name)."', `meta_keyword`='".$this->db->escape($cat_name)."', `meta_description`='".$this->db->escape($cat_name)."',`seo_title`='".$this->db->escape($cat_name)."',`seo_h1`='".$this->db->escape($cat_name)."'");
