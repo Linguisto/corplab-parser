@@ -75,7 +75,7 @@ class ModelModuleParser extends Model {
 						$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `query`='category_id=$cat_id'");
 						$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='category_id=$cat_id', `keyword`='".$this->db->escape($keyword)."'");
 					}
-					
+					unset($query);
 					$parent_cat=$cat_id;
 				} else {
 					$cat_name = 'Для офиса';
@@ -122,9 +122,9 @@ class ModelModuleParser extends Model {
 	}
 	
 	public function check_manufacturer($manufacturer){
-		$query = $this->db->query("SELECT DISTINCT `manufacturer_id` FROM ".DB_PREFIX."manufacturer WHERE `name`='$manufacturer'");
+		$query = $this->db->query("SELECT DISTINCT `manufacturer_id` FROM ".DB_PREFIX."manufacturer WHERE `name`='".$this->db->escape($manufacturer)."'");
 		if (!empty($query->row))
-			return 1;
+			return $query->row['manufacturer_id'];
 		else 
 			return 0;
 	}
@@ -145,29 +145,29 @@ class ModelModuleParser extends Model {
 		$stock_status_id = 5;
 		if ($product['amount']>0) $stock_status_id = 7;
 		
-		$this->db->query("INSERT INTO ".DB_PREFIX."product SET `product_id`=".$product['code'].", `model`='".$this->db->escape($product['model'])."', `sku`='".$product['SKU']."', `upc`='".$product['UPC']."', `ean`=".$product['code'].", `weight`='".$product['weight']."',`manufacturer_id`='$manufacturer_id',`status`=1,`stock_status_id`=$stock_status_id,`image`='".$product['image']."',`quantity`='".$product['amount']."',`price`='".$product['price']."',`date_added` = NOW(),`subtract`=1 ON DUPLICATE KEY UPDATE `product_id`=".$product['code'].", `model`='".$this->db->escape($product['model'])."', `sku`='".$product['SKU']."', `upc`='".$product['UPC']."', `ean`=".$product['code'].", `weight`='".$product['weight']."',`manufacturer_id`='$manufacturer_id',`status`=1,`stock_status_id`=$stock_status_id,`image`='".$product['image']."',`quantity`='".$product['amount']."',`price`='".$product['price']."',`date_added` = NOW(),`subtract`=1");
+		$this->db->query("INSERT INTO ".DB_PREFIX."product SET `product_id`=".(int)(int)$product['code'].", `model`='".$this->db->escape($product['model'])."', `sku`='".$product['SKU']."', `upc`='".$product['UPC']."', `ean`=".(int)(int)$product['code'].", `weight`='".$product['weight']."',`manufacturer_id`='$manufacturer_id',`status`=1,`stock_status_id`=$stock_status_id,`image`='".$product['image']."',`quantity`='".$product['amount']."',`price`='".$product['price']."',`date_added` = NOW(),`subtract`=1 ON DUPLICATE KEY UPDATE `product_id`=".(int)(int)$product['code'].", `model`='".$this->db->escape($product['model'])."', `sku`='".$product['SKU']."', `upc`='".$product['UPC']."', `ean`=".(int)(int)$product['code'].", `weight`='".$product['weight']."',`manufacturer_id`='$manufacturer_id',`status`=1,`stock_status_id`=$stock_status_id,`image`='".$product['image']."',`quantity`='".$product['amount']."',`price`='".$product['price']."',`date_added` = NOW(),`subtract`=1");
 		
-		$this->db->query("INSERT INTO ".DB_PREFIX."product_description SET `product_id`=".$product['code'].", `language_id`=1, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."' ON DUPLICATE KEY UPDATE `product_id`=".$product['code'].", `language_id`=1, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."'");
+		$this->db->query("INSERT INTO ".DB_PREFIX."product_description SET `product_id`=".(int)$product['code'].", `language_id`=1, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."' ON DUPLICATE KEY UPDATE `product_id`=".(int)$product['code'].", `language_id`=1, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."'");
 		
-		$this->db->query("INSERT INTO ".DB_PREFIX."product_description SET `product_id`=".$product['code'].", `language_id`=2, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."' ON DUPLICATE KEY UPDATE `product_id`=".$product['code'].", `language_id`=2, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."'");
+		$this->db->query("INSERT INTO ".DB_PREFIX."product_description SET `product_id`=".(int)$product['code'].", `language_id`=2, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."' ON DUPLICATE KEY UPDATE `product_id`=".(int)$product['code'].", `language_id`=2, `name`='".$this->db->escape($product['name'])."', `description`='".$this->db->escape($product['description'])."', `meta_description`='".$this->db->escape($product['description'])."', `meta_keyword`='".$this->db->escape($product['name'])."',`seo_title`='".$this->db->escape($product['name'])."',`seo_h1`='".$this->db->escape($product['name'])."',`tag`='".$this->db->escape($product['name'])."'");
 		
 		if (isset($product['categories']) && !empty($product['categories'])){
 			foreach($product['categories'] as $category => $value){
 				if ($category!=='home') 
-					$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".$product['code']."', `category_id`='".$category."', `main_category`=0 ON DUPLICATE KEY UPDATE `product_id`='".$product['code']."', `category_id`='".$category."', `main_category`=0");
+					$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".(int)$product['code']."', `category_id`='".$category."', `main_category`=0 ON DUPLICATE KEY UPDATE `product_id`='".(int)$product['code']."', `category_id`='".$category."', `main_category`=0");
 				else
-					$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".$product['code']."', `category_id`='5', `main_category`=0 ON DUPLICATE KEY UPDATE `product_id`='".$product['code']."', `category_id`='5', `main_category`=0");
+					$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".(int)$product['code']."', `category_id`='5', `main_category`=0 ON DUPLICATE KEY UPDATE `product_id`='".(int)$product['code']."', `category_id`='5', `main_category`=0");
 			}
 		}
 		
-		$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".$product['code']."', `category_id`='".$product['category']."', `main_category`=1  ON DUPLICATE KEY UPDATE `product_id`='".$product['code']."', `category_id`='".$product['category']."', `main_category`=1");
+		$this->db->query("INSERT INTO ".DB_PREFIX."product_to_category SET `product_id`='".(int)$product['code']."', `category_id`='".$product['category']."', `main_category`=1  ON DUPLICATE KEY UPDATE `product_id`='".(int)$product['code']."', `category_id`='".$product['category']."', `main_category`=1");
 		
 		foreach($product['attributes'] as $attribute => $value){
-			$query = $this->db->query("SELECT `attribute_id` FROM ".DB_PREFIX."attribute_description WHERE `name`='$attribute' AND `language_id`=2");
+			$query = $this->db->query("SELECT `attribute_id` FROM ".DB_PREFIX."attribute_description WHERE `name`='".$this->db->escape($attribute)."' AND `language_id`=2");
 			$attr_id = $query->row['attribute_id'];
 			if (!empty($attr_id)){
-				$this->db->query("INSERT INTO ".DB_PREFIX."product_attribute SET `product_id`='".$product['code']."', `attribute_id`=$attr_id, language_id=1, text='$value' ON DUPLICATE KEY UPDATE `product_id`='".$product['code']."', `attribute_id`=$attr_id, language_id=1, text='".$this->db->escape($value)."'");
-				$this->db->query("INSERT INTO ".DB_PREFIX."product_attribute SET `product_id`='".$product['code']."', `attribute_id`=$attr_id, language_id=2, text='$value' ON DUPLICATE KEY UPDATE `product_id`='".$product['code']."', `attribute_id`=$attr_id, language_id=2, text='".$this->db->escape($value)."'");
+				$this->db->query("INSERT INTO ".DB_PREFIX."product_attribute SET `product_id`='".(int)$product['code']."', `attribute_id`=$attr_id, language_id=1, text='$value' ON DUPLICATE KEY UPDATE `product_id`='".(int)$product['code']."', `attribute_id`=$attr_id, language_id=1, text='".$this->db->escape($value)."'");
+				$this->db->query("INSERT INTO ".DB_PREFIX."product_attribute SET `product_id`='".(int)$product['code']."', `attribute_id`=$attr_id, language_id=2, text='$value' ON DUPLICATE KEY UPDATE `product_id`='".(int)$product['code']."', `attribute_id`=$attr_id, language_id=2, text='".$this->db->escape($value)."'");
 			}
 		}
 		
@@ -176,25 +176,25 @@ class ModelModuleParser extends Model {
 			$relatedGoods = explode(';', $relatedGoods);
 			
 			foreach($relatedGoods as $rel_prod){
-				$this->db->query("INSERT IGNORE INTO ".DB_PREFIX."product_related SET product_id=".$product['code'].", related_id=".$rel_prod);
+				$this->db->query("INSERT IGNORE INTO ".DB_PREFIX."product_related SET product_id=".(int)$product['code'].", related_id=".$rel_prod);
 			}
 		}
 		
-		$this->db->query("INSERT IGNORE INTO ".DB_PREFIX."product_to_store SET `product_id`=".$product['code'].", `store_id`=0");
+		$this->db->query("INSERT IGNORE INTO ".DB_PREFIX."product_to_store SET `product_id`=".(int)$product['code'].", `store_id`=0");
 		
-		$keyword=$this->transliterate($product['name']);
+		$keyword = $this->transliterate($product['name']).'-'.(int)$product['code'];
 		
-		$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `query`='product_id=".$product['code']."'");
+		$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `query`='product_id=".(int)$product['code']."'");
+		
 		if (empty($query->row)){
-			$query = $this->db->query("SELECT `url_alias_id` FROM ".DB_PREFIX."url_alias WHERE `keyword`='".$this->db->escape($keyword)."'");
-			if (empty($query->row))
-				$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='$keyword'");
-			else
-				$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='".$product['code']."'");
+			$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".(int)$product['code']."', `keyword`='$keyword'");
 		} else {
-			$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `keyword`='$keyword'");
-			$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".$product['code']."', `keyword`='$keyword'");
+			$this->db->query("DELETE FROM ".DB_PREFIX."url_alias WHERE `url_alias_id`=".$query->row['url_alias_id']);
+			$this->db->query("INSERT INTO ".DB_PREFIX."url_alias SET `query`='product_id=".(int)$product['code']."', `keyword`='$keyword'");
 		}	
+		
+		$this->cache->delete('product');
+		
 			
 	}
 	
