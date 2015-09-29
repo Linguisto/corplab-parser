@@ -136,7 +136,12 @@ class ControllerModuleParser extends Controller{
 		$this->load->model('catalog/manufacturer');
 		require_once(DIR_APPLICATION . 'simple_html_dom.php');
 		
-		$CatPage = file_get_html("http://relefopt.ru/catalog/?AJAX=Y&PAGEN_1=1&pagenum=48&sort_field=RZN&sort_order=asc&in_stock_n=Y&composite=N&catalog=y");
+		$link = "http://relefopt.ru/catalog/?AJAX=Y&PAGEN_1=1&pagenum=48&sort_field=RZN&sort_order=asc&in_stock_n=Y&composite=N&catalog=y";
+		$CatPage = new simple_html_dom();
+		$CatPage->load_file($link, true);
+		//почему-то перестало работать
+		//$CatPage = file_get_html("http://relefopt.ru/catalog/?AJAX=Y&PAGEN_1=1&pagenum=48&sort_field=RZN&sort_order=asc&in_stock_n=Y&composite=N&catalog=y");
+		$maxCatPage = (int)$CatPage->find('.page-list li a', -1)->plaintext;
 		$maxCatPage = (int)$CatPage->find('.page-list li a', -1)->plaintext;
 		$CatPage->clear();
 		unset($CatPage);
