@@ -187,11 +187,11 @@ class ControllerModuleParser extends Controller{
 				if(!empty($detinfo)){
 					if (!empty($detinfo[1])) $product_data['code'] = preg_replace('/\D+/', '', $detinfo[1]);
 					if (!empty($detinfo[2])){
-						$product_data['SKU'] = preg_replace('/;/', '', $detinfo[2]);
-						$product_data['SKU'] = preg_replace('/\s\W+/', '', $product_data['SKU']);
+						$product_data['UPC'] = preg_replace('/;/', '', $detinfo[2]);
+						$product_data['UPC'] = preg_replace('/\s\W+/', '', $product_data['UPC']);
 					} 
 					if (isset($detinfo[3]) && !empty($detinfo[3])){
-						$product_data['UPC'] = preg_replace('/\D+/', '', $detinfo[3]);
+						$product_data['SKU'] = preg_replace('/\D+/', '', $detinfo[3]);
 					
 						if (isset($detinfo[4]) && !empty($detinfo[4]))
 							$product_data['attributes']['Страна-производитель'] = $detinfo[4];
