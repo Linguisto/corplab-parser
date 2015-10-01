@@ -284,7 +284,11 @@ class ControllerModuleParser extends Controller{
 				foreach($product->find('.visual .highslide') as $el) $img_src = $parsedDomain.$el->href;
 				if (!empty($img_src)){
 					$product_data['image'] = $path_to_img.$product_data['code'].'.jpg';
-					file_put_contents(DIR_IMAGE . $product_data['image'], file_get_contents($img_src));
+					try {
+						file_put_contents(DIR_IMAGE . $product_data['image'], file_get_contents($img_src));
+					} catch (Exception $e) {
+						$product_data['image'] = '';
+					}
 				}else{
 					$product_data['image'] = '';
 				}
