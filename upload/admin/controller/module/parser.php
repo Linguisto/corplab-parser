@@ -187,11 +187,11 @@ class ControllerModuleParser extends Controller{
 				if(!empty($detinfo)){
 					if (!empty($detinfo[1])) $product_data['code'] = preg_replace('/\D+/', '', $detinfo[1]);
 					if (!empty($detinfo[2])){
-						$product_data['UPC'] = preg_replace('/;/', '', $detinfo[2]);
-						$product_data['UPC'] = preg_replace('/\s\W+/', '', $product_data['UPC']);
+						$product_data['SKU'] = preg_replace('/;/', '', $detinfo[2]);
+						$product_data['SKU'] = preg_replace('/\s\W+/', '', $product_data['SKU']);
 					} 
 					if (isset($detinfo[3]) && !empty($detinfo[3])){
-						$product_data['SKU'] = preg_replace('/\D+/', '', $detinfo[3]);
+						$product_data['UPC'] = preg_replace('/\D+/', '', $detinfo[3]);
 					
 						if (isset($detinfo[4]) && !empty($detinfo[4]))
 							$product_data['attributes']['Страна-производитель'] = $detinfo[4];
@@ -239,6 +239,12 @@ class ControllerModuleParser extends Controller{
 			
 				$product_data['manufacturer'] = trim($product->find('.detail-block strong.title a', 0)->plaintext);
 				$product_data['model'] = trim($product->find('.detail-block strong.title a', 1)->plaintext);
+				
+				$pd_code = $product_data['code'];
+				$product_data['code'] = $product_data['model'];
+				$product_data['model'] = $product_data['SKU'];
+				$product_data['SKU'] = $pd_code;
+				unset($pd_code);
 			
 				$manufacturer_exists = $this->model_module_parser->check_manufacturer($product_data['manufacturer']);
 				
